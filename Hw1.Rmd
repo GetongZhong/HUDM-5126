@@ -1,0 +1,166 @@
+---
+title: "HW1"
+author: "Getong Zhong"
+date: "2022-09-22"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+playbill <- read.csv('C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/playbill.csv')
+indicators <- read.table(file='C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/indicators.txt',header = TRUE)
+invoices <- read.table(file='C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/invoices.txt',header = TRUE)
+library(knitr)
+```
+
+## Problem 1
+### (a)
+```{r}
+fit1 <- lm(CurrentWeek ~ LastWeek, data = playbill)
+summary(fit1)
+confint(fit1, level = .9)[2, ]
+```
+According to the result, we can be 95% confident that with one unit increase of the gross box office results for the current week (in US dollar), the increase of is the gross box office results for the previous week (in US dollar) will be between 0.95 to 1.01. Therefore 1 is a plausible value for $\beta1$. 
+
+### (b)
+```{r}
+t.test(playbill$LastWeek,mu=10000)
+summary(fit1)$coef[1, 2]
+b <- coef(fit1)[[1]]
+b1 <- b + coef(fit1)[[2]] * 10000
+se <- summary(fit1)$coef[1, 2]
+t <- (b - b1) / se
+t
+t>qt(p=0.05, nrow(playbill) - 2, lower.tail = FALSE)
+
+coef(summary(fit1))['(Intercept)', 'Estimate']
+t_stat = (coef(summ)['(Intercept)', 'Estimate'] - 10000)/coef(summ)['(Intercept)', 'Std. Error']
+pt(t_stat, df = nrow(playbill_data) - 2) q
+```
+According to the result, t doesn't fall into the rejection region therefore, we don't have enough evidence to reject the null hypothesis. Therefore we cannot conclude that the true mean gross box office results is significantly different from 10000.
+
+### (c)
+```{r}
+predict(fit1, data.frame(LastWeek = 400000), interval = "prediction")
+```
+From the result we can conclude that the prediction of 450000 dollar is not a feasible prediction, for a production of 400000 dollar last week, since it fall way beyond the 95% interval of prediction from 359832.8 to 439442.2. 
+
+### (d)
+```{r}
+plot(fit1)
+```
+I think it is appropriate prediction method since it seems like the given information shows there is a almost perfect equalness between this week's gross box office results and previous week's gross box office results. However, worth to mention that there still have three residuals from above plots,it might affect the accuracy of prediction in some sort of degree. 
+
+## Problem 2
+
+### (a)
+```{r}
+fit2<-lm(PriceChange ~ LoanPaymentsOverdue, data = indicators)
+confint(fit2)[2, ]
+```
+Because the 95% confidence interval for $\beta1$ is from -4.16 to -0.33, we have enough evidence to believe that there is a significant negative linear association 
+
+### (b)
+```{r}
+predict(fit2, data.frame(LoanPaymentsOverdue = 4), interval = "prediction")
+```
+0% is not a reasonable estimate for x=4, since the 95% confidence limit is far below 0.
+
+### Problem 3 
+
+### (a)
+```{r}
+fit3<-lm(Time ~ Invoices, data = invoices)
+summary(fit3)
+b0<-coef(fit3)[[1]]
+b0_se<-0.1222707
+b0_t<-5.248
+p3_95 <- c(b0 - 1.96 * b0_se, b0 + 1.96 * b0_se)
+```
+The 95% confidence interval for the start-up time is: `r p3_95`
+
+### (b)
+```{r}
+t.test(invoices$Invoices,mu=0.01)
+summary(fit3)$coef[1, 2]
+b <- coef(fit3)[[1]]
+b1 <- b + coef(fit3)[[2]] * 10000
+se <- summary(fit3)$coef[1, 2]
+t <- (b - b1) / se
+t>qt(p=0.05, nrow(invoices) - 2, lower.tail = FALSE)
+```
+We don't have enough evidence to reject the null hypothesis, therefore we cannot conclude that the true mean process time is significantly different from 0.01.
+
+### (c)
+```{r}
+b0<-coef(fit3)[[1]]
+b1<-coef(fit3)[[2]]
+rse<-0.3298
+fit3
+df<-nrow(invoices) - 2
+rss <- rse^2 * df
+mse <- rss / nrow(invoices) 
+est<- b0 + b1 * 130
+err <- qt(0.975, 28) * sqrt(mse) * sqrt(1 + 1 / nrow(invoices)) # since x0 = xbar
+upr <- est + err
+lwr <- est - err
+```
+The 95% prediction interval for the time taken to process 130 invoices is: $[`r lwr`, `r upr`]$.
+
+## Problem 4
+### (a)
+We are trying to prove that
+\[
+\hat{\beta} = \frac{\sum_{i=1}^n x_iy_i}{\sum_{i=1}^n x_i^2}.
+\]
+Since
+\[
+Y_i = \beta x_i + e_i,
+\]
+Then
+\[
+\text{RSS} = \sum_{i=1}^n (y_i-\hat{y}_i)^2 = \sum_{i=1}^n(y_i-\hat{\beta}x_i)^2
+\]
+take derivative at the both sides of the equation we get:
+\begin{align}
+\frac{\partial}{\partial \beta}\text{RSS} = -2 \sum_{i=1}^nx_i(y_i - \hat{\beta}x_i) & = 0 \iff \\
+\sum_{i=1}^nx_iy_i - \hat{\beta} \sum_{i=1}^n x_i^2 & = 0 \iff \\
+\hat{\beta} & = \frac{\sum_{i=1}^n x_i y_i}{\sum_{i=1}^nx_i} \tag*{$\square$}.
+\end{align}
+
+### (b)
+1. \[
+     E(\hat{\beta} | X) = E\left( \frac{\sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2} \right) = 
+       \frac{\sum_{i=1}^n x_i E(y_i)}{\sum_{i=1}^n x_i^2 } = \beta \frac{\sum_{i=1}^nx_i^2}{\sum_{i=1}^n x_i^2} = \beta 
+   \]
+2. \[
+     \text{Var}(\hat{\beta}|X) = \text{Var} \left( \frac{\sum_{i=1}^nx_iy_i}{\sum_{i=1}^n x_i^2}\right) = 
+     \frac{\sum_{i=1}^n x_i^2\sigma^2}{\left( \sum_{i=1}^n x_i^2 \right)^2} = \frac{\sigma^2}{\sum_{i=1}^n x_i^2} 
+   \]
+3. Since X is normal distributed, combine (1) and (2) we can get (3)
+
+## Problem 5
+(d) is correct. RSS describes the sum of square of the distance between the actual value and predict value, therefore model 2 has a higher RSS since the gap between each point and the regression line is larger than in model 1; SSreg describes how well a regression model represents the modeled data, therefore model 1 has higher SSreg since the points on model 1 more fitted the regression line. 
+
+## Problem 6
+
+### (a)
+\[
+y_i - \hat{y}_i = (y_i - \hat{y}_i) - \bar{y} + \bar{y} = (y_i - \bar{y}) - (\hat{y}_i - \bar{y}) =
+  (y_i - \bar{y}) - (\hat{\beta}x_i - \hat{\beta}\bar{x}) = (y_i - \bar{y}) - \hat{\beta}(x_i - \bar{x}) 
+\]
+
+### (b)
+\[
+\hat{y}_i - \bar{y} = \hat{\beta}x_i - \hat{\beta}\bar{x} = \hat{\beta}(x_i - \bar{x})
+\]
+
+### (c)
+\[
+\begin{gathered}
+\sum_{i=1}^n (y_i-\hat{y}_i)(\hat{y}_i - \bar{y}) = \sum_{i=1}^n (y_i - \hat{\beta_0} - \hat{\beta_1}x_i)\hat{\beta}_1(x_i - \bar{x}) = \\
+\hat{\beta}_1 \left( \sum_{i=1}^n y_i(x_i \bar{x}) - \hat{\beta}_0 \sum_{i=1}^n x_i - \bar{x} - \hat{\beta}_1 \sum_{i=1}^n x_i(x_i - \bar{x}) \right) = \\
+\hat{\beta_1}(\text{SXY} - 0 - \hat{\beta_1} \text{SXX}) = \\
+\hat{\beta_1}(SXY - SXY) = 0 
+\end{gathered}
+\]

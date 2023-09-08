@@ -1,0 +1,133 @@
+---
+title: "HW4"
+author: "Getong Zhong"
+date: "2022-11-03"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 4.2 Exercises
+### Problem 1
+```{r}
+setwd("C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126")
+salary <- read.table("ProfessorSalaries.txt", header = TRUE)
+attach(salary)
+model <- lm(ThirdQuartile ~ Experience)
+wt <- 1/lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+wt_model <- lm(ThirdQuartile ~ Experience, weights = wt)
+predict(wt_model, data.frame(Experience = 6))
+```
+### Problem 2
+Since intercept is 0 then weighted least square estimate of intercept is also 0, therefore
+\[
+\hat{\beta_0w} = \frac{\sum_{i=1}^n w_iy_i}{\sum_{i=1}^n w_i}-\beta_1w*\frac{\sum_{i=1}^n w_ix_i}{\sum_{i=1}^n w_i}=0
+\]
+\[
+\frac{\sum_{i=1}^n w_iy_i}{\sum_{i=1}^n w_i} = \hat{\beta_1w}*\frac{\sum_{i=1}^n w_ix_i}{\sum_{i=1}^n w_i}
+\]
+\[
+\hat{\beta_1w} = \frac{\sum_{i=1}^n w_iy_i}{\sum_{i=1}^n w_ix_i} 
+\]
+if we take weight as 1/xi then the equation becomes,
+\[
+\hat{\beta_1w} = \frac{\sum_{i=1}^n y_i/x_i}{n} 
+\]
+
+### Problem 3
+#### (a)
+It shows that there is clearly heteroskedasticity in this model so we need to use weighted least squares to fit model. ni is valid weights since the response variable Y is calculating the median of a group of variables, we can account the n (simple size of house sold in that year) as the weights.
+```{r}
+Houston <- read.table("HoustonRealEstate.txt", header = TRUE)
+attach(Houston)
+model3 <- lm(Yi ~ x1i + x2i)
+par(mfrow=c(2,2))
+plot(model3)
+```
+
+#### (b)
+The model (4.6) is not valid because it failed the assumption of equal or similar variances in different groups being compared.
+
+#### (c)
+I will try a log transformation to the model since the residuals plot shows it might have a potential log relationship between the predictor and response variable. 
+
+## 5.4 Exercises
+### Problem 1 
+We first just put them into a least square linear regression model, from the summary of the model we can see that the predictor BILL is not statistical significant, therefore some adjustment of the model is necessary.
+```{r}
+overdue <- read.table("overdue.txt", header = TRUE)
+attach(overdue)
+overdue_model <- lm(LATE ~ BILL)
+summary(overdue_model)
+
+plot(overdue_model)
+```
+From the plots we can clearly observe that there is two types of data which are almost symmetric, therefore we are going to assign the TYPE to each BILL and add the categorical variable TYPE into the model
+```{r}
+overdue$TYPE <- c(rep(1,48), rep(2,48))
+attach(overdue)
+overdue_model2 <- lm(LATE ~ BILL + TYPE)
+summary(overdue_model2)
+```
+However we find the predictor BILL is still not significant, therefore we are going use TYPE*BILL as the predictor and finally both the predictor and intercept are significant.
+```{r}
+overdue_model3 <- lm(LATE ~  TYPE*BILL)
+summary(overdue_model3)
+```
+
+### Problem 2 
+#### (a)
+True
+```{r}
+HoustonChron <- read.csv("HoustonChronicle.csv")
+attach(HoustonChron)
+plot(HoustonChron)
+cor(HoustonChron$X.Low.income.students, HoustonChron$X.Repeating.1st.Grade)
+```
+#### (b)
+False. Since the P-value is 0.1021, we fail to reject the null hypothesis at 5% level of significance, therefore there is no enough evidence to show a increase in the percentage of students repeating first grade between 1994–1995 and 2004–2005.
+```{r}
+HoustonChron$Year <- factor(HoustonChron$Year)
+t.test(X.Repeating.1st.Grade~Year, var.equal=T)
+```
+
+#### (c)
+Since the P-value is 0.07905, we fail to reject the null hypothesis at 5% level of significance, therefore there is no enough evidence to show there association between percentage of low income student and percentage of students repeating first grade in 1994.
+```{r}
+x1994 <- HoustonChron$X.Repeating.1st.Grade[HoustonChron$Year == "1994"]
+y1994 <- HoustonChron$X.Low.income.students[HoustonChron$Year == "1994"]
+x2004 <- HoustonChron$X.Repeating.1st.Grade[HoustonChron$Year == "2004"]
+y2004 <- HoustonChron$X.Low.income.students[HoustonChron$Year == "2004"]
+cor.test(x1994, y1994)
+
+```
+Since the P-value is 0.0005413, we can to reject the null hypothesis at 5% level of significance, therefore there is enough evidence to show there association between percentage of low income student and percentage of students repeating first grade in 2004.
+```{r}
+cor.test(x2004, y2004)
+```
+
+### Probelm 3
+#### (a)
+P-value of EndofHarvest*Rain is 0.0120, therefore we have enough evidence to reject the null hypothesis and conclude that there are enough evidence to show that interaction term in model is significant.
+```{r}
+latour <- read.table("latour.txt", header = TRUE)
+attach(latour)
+latour_model <- lm(Quality ~ EndofHarvest + Rain + EndofHarvest*Rain)
+summary(latour_model)
+```
+
+#### (b)
+##### (i)
+y = 5.16122 - 0.03145EndofHarvest + 1.78670Rain - 0.08314EndofHarvest:Rain, when y = -1, rain = 0 
+```{r}
+latour
+(-1-5.16122)/(-0.03145)
+```
+
+##### (ii)
+when y = -1, rain = 1 
+```{r}
+(-1-5.16122-1.78670)/-(0.03145+0.08314)
+```

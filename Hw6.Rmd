@@ -1,0 +1,195 @@
+---
+title: "HW6"
+author: "Getong Zhong"
+date: "2022-12-02"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 7.1
+### (a)
+```{r}
+Case <- c(1:5)
+Y <- c(5,6,8,9,11)
+X1 <- c(1,200,-50,909,506)
+X2 <- c(1004,806,1058,100,505)
+X3 <- c(6,7.3,11,13,13.1)
+data1 <- as.data.frame(cbind(Case, Y, X1, X2, X3))
+mod1 <- lm(Y ~ X1 + X2 + X3, data = data1)
+mod2 <- lm(Y ~ X1 + X2, data = data1)
+mod3 <- lm(Y ~ X3, data = data1)
+adjr2 <- c(summary(mod1)$adj.r.squared, summary(mod2)$adj.r.squared, summary(mod3)$adj.r.squared)
+subset_size <- c(1,2,3)
+plot(adjr2 ~ subset_size, xlab = "Subset Size", ylab = "Adjust R Square")
+```
+
+```{r}
+Predictors <- c("X1, X2, X3", "X1, X2", "X3")
+AIC <- c(AIC(mod1, k=2), AIC(mod2, k=2), AIC(mod3, k=2))
+BIC <- c(AIC(mod1, k=log(nrow(data1))), AIC(mod2, k=log(nrow(data1))), AIC(mod3, k=log(nrow(data1))))
+
+results <- cbind(subset_size, Predictors, adjr2, AIC, BIC)
+results
+```
+From the chart we can tell that the model 2 is the best model, since it has the highest adjusted r square value and lowest AIC and BIC values
+
+### (b)
+AIC forward selection
+```{r}
+AIC_selection <- step(lm(Y ~ 1), Y ~ X1 + X2 + X3, direction="forward")
+AIC_selection
+```
+
+BIC forward selection
+```{r}
+BIC_forward<- step(lm(Y ~ 1), Y ~ X1 + X2 + X3, direction="forward", k = log(nrow(data1)))
+BIC_forward
+```
+
+### (c)
+Since the stepwise regression method choose the predictors one by one, there are many situations that the model might be over-fitted that is the p -values obtained after variable selection are much smaller than their
+true values, therefore there have some difference of outcome between (a) and (b). Therefore, the result of (a) and (b) are not same.
+
+### (d)
+
+I would suggest the model from (b), since x1 and x2 has a really high correlation, that might affects the result of adjusted r square value, and the accuracy of the model, and model from (b) doesn't include either X1 or X2. 
+
+## Problem 7.2
+### (a)
+```{r}
+Y <- c(78.5,74.3,104.3,87.6,95.9,109.2,102.7,72.5,93.1,115.9,83.8,113.3,109.4)
+x1 <- c(7,1,11,11,7,11,3,1,2,21,1,11,10)
+x2 <- c(26,29,56,31,52,55,71,31,54,47,40,66,68)
+x3 <- c(6,15,8,8,6,9,17,22,18,4,23,9,8)
+x4 <- c(60,52,20,47,33,22,6,44,22,26,34,12,12)
+
+data2 <- as.data.frame(c(Y, x1, x2, x3, x4))
+mod1 <- lm(Y ~ x4, data2)
+mod2 <- lm(Y ~ x1 + x2, data2)
+mod3 <- lm(Y ~ x1 + x2 + x4, data2)
+mod4 <- lm(Y ~ x1 + x2 + x3 + x4, data2)
+
+adjr2 <- c(summary(mod1)$adj.r.squared, summary(mod2)$adj.r.squared, summary(mod3)$adj.r.squared, summary(mod4)$adj.r.squared)
+subset_size <- c(1,2,3,4)
+
+plot(adjr2 ~ subset_size, xlab = "Subset Size", ylab = "Statistic: adjr2")
+Predictors <- c("X4", "X1, X2", "X1, X2, X4", "X1, X2, X3, X4")
+AIC_col <- c(AIC(mod1, k=2), AIC(mod2, k=2), AIC(mod3, k=2), AIC(mod4, k=2))
+BIC_col <- c(AIC(mod1, k=log(nrow(data2))), AIC(mod2, k=log(nrow(data2))), AIC(mod3, k=log(nrow(data2))), AIC(mod4, k=log(nrow(data2))))
+
+allsubsets <- cbind(subset_size, Predictors, adjr2, AIC_col, BIC_col)
+allsubsets
+```
+Based on the results, I think model 2 and model 3 are both good, since they have relatively high adjusted r square and low AIC/BIC compare to other models.
+
+### (b)
+AIC forward
+```{r}
+attach(data2)
+AIC_forward <- step(lm(Y ~ 1), Y ~ x1 + x2 + x3 + x4, direction="forward")
+AIC_forward
+```
+BIC forward
+```{r}
+BIC_forward <- step(lm(Y ~ 1), Y ~ x1 + x2 + x3 + x4, direction="forward", k = log(nrow(data2)))
+BIC_forward
+detach(data2)
+```
+Based on the results, the three predictors model works the best 
+
+### (c)
+AIC backward
+```{r}
+AIC_backward <- step(lm(Y ~ x1 + x2 + x3 + x4), Y ~ x1 + x2 + x3 + x4, direction="backward")
+AIC_backward
+```
+BIC backward
+```{r}
+BIC_backward <- step(lm(Y ~ x1 + x2 + x3 + x4), Y ~ x1 + x2 + x3 + x4, direction="backward", k = log(nrow(data2)))
+BIC_backward
+```
+Based on the results, the two or three predictors model works the best 
+
+### (d)
+Since the stepwise regression method choose the predictors one by one, there are many situations that the model might be over-fitted that is the p -values obtained after variable selection are much smaller than their
+true values, therefore there have some difference of outcome between (a) and (b)/(c). For (b) and (c), there is not gaurentee that the backward and forward will have the same results. 
+
+### (e)
+I would choose the two predictor models, since X2 and X4 has a really high correlationship, I'm afraid that might affect the accuracy of the model.
+
+## Question 7.3
+### (a)
+```{r}
+library(readr)
+data3 <- read.csv("C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/pgatour2006.csv")
+
+mod1 <- lm(log(PrizeMoney) ~ DrivingAccuracy, data = data3)
+mod2 <- lm(log(PrizeMoney) ~ DrivingAccuracy + GIR , data = data3)
+mod3 <- lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage, data = data3)
+mod4 <- lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion, data = data3)
+mod5 <- lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves, data = data3)
+mod6 <- lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves + Scrambling , data = data3)
+mod7 <- lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves + Scrambling + PuttsPerRound, data = data3)
+
+adjr2 <- c(summary(mod1)$adj.r.squared, summary(mod2)$adj.r.squared, summary(mod3)$adj.r.squared, summary(mod4)$adj.r.squared, summary(mod5)$adj.r.squared,summary(mod6)$adj.r.squared,summary(mod7)$adj.r.squared)
+subset_size <- c(1,2,3,4,5,6,7)
+
+plot(adjr2 ~ subset_size, xlab = "Subset Size", ylab = "Statistic: adjr2")
+Predictors <- c("X1", "X1, X2", "X1, X2, X3", "X1, X2, X3, X4", "X1, X2, X3, X4, X5", "X1, X2, X3, X4, X5, X6", "X1, X2, X3, X4, X5, X6, X7")
+AIC_col <- c(AIC(mod1, k=2), AIC(mod2, k=2), AIC(mod3, k=2), AIC(mod4, k=2), AIC(mod5, k=2), AIC(mod6, k=2), AIC(mod7, k=2))
+BIC_col <- c(AIC(mod1, k=log(nrow(data3))), AIC(mod2, k=log(nrow(data3))), AIC(mod3, k=log(nrow(data3))), AIC(mod4, k=log(nrow(data3))), AIC(mod5, k=log(nrow(data3))), AIC(mod6, k=log(nrow(data3))),AIC(mod7, k=log(nrow(data3))))
+
+allsubsets <- cbind(subset_size, Predictors, adjr2, AIC_col, BIC_col)
+allsubsets
+```
+From Adjusted R2  ,AIC, AICC and BIC we can see that the model with 6 or 7 parameters all possess a relatively high values and indicate the model of subset 6 and 7 to be the best of the possible models.
+
+### (b)
+AIC backward 
+```{r}
+AIC_backward <- step(lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves + Scrambling + PuttsPerRound, data = data3), direction="backward")
+AIC_backward
+```
+
+BIC backward 
+```{r}
+BIC_backward <- step(lm(log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves + Scrambling + PuttsPerRound, data = data3), direction="backward", k = log(nrow(data3)))
+BIC_backward
+```
+model log(PrizeMoney) ~ DrivingAccuracy + GIR + BirdieConversion + SandSaves + Scrambling + PuttsPerRound is the best
+
+### (c)
+AIC forward 
+```{r}
+AIC_forward <- step(lm(log(PrizeMoney) ~ 1, data = data3), log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves + Scrambling + PuttsPerRound, direction="forward", data = data3)
+AIC_forward
+
+```
+
+BIC forward 
+```{r}
+BIC_forward <- step(lm(log(PrizeMoney) ~ 1, data = data3), log(PrizeMoney) ~ DrivingAccuracy + GIR + PuttingAverage + BirdieConversion + SandSaves + Scrambling + PuttsPerRound,direction="forward", k = log(nrow(data3)))
+BIC_forward
+```
+model of log(PrizeMoney) ~ GIR + PuttsPerRound + BirdieConversion + Scrambling + SandSaves is the best 
+
+### (d)
+For results of (a), (b) and (c), the results seems oppsite from one and other is because as a model takes away variables while the other adds variables. There is no significant difference between both as they yield multivariate models of similar magnitude. All the models are both from the same of and has the AIC of -156.64
+
+### (e)
+Considering the similarity of the results between the backward and forward approaches, we can tell that the 5 variable model seems to be the best as it has a higher overall AIC result. While the 7 variable model contains a significant AIC is higher, but this might boost by the ulticollinearity and correlation that might be present in the 7 variable model.
+
+### (f)
+```{r}
+summary(lm(log(PrizeMoney) ~ GIR + PuttsPerRound + BirdieConversion + Scrambling + SandSaves, data = data3))
+```
+When all the predictors are zero, the average value of Prize is e to the power of -0.583181
+A one unit increase in GIR results on a e to the power of 0.197022 average percentage change in Prize
+A one unit increase in PuttsPerRound results on a e to the power of -0.349738 average percentage change in Prize
+A one unit increase in BirdieConversion results on a e to the power of 0.162752 average percentage change in Prize
+A one unit increase in Scrambling results on a e to the power of 0.049635 average percentage change in Prize
+A one unit increase in SandSaves results on a e to the power of 0.015524 average percentage change in Prize
+This model has a low adjusted r square value of 0.5459, which means about 46 percent of variance has not explained by the model. Besides, we need to aware of that we did not account for multicolinearity and correlation between variables, this model is not yet a perfect model, ideed it has a lot of space of improvement. 

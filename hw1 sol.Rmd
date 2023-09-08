@@ -1,0 +1,176 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+# Simple linear regression
+
+## playbill
+First we load the data.
+
+```{r, message = FALSE}
+playbill <- read.csv('C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/playbill.csv')
+library(knitr)
+```
+
+Then we fit a linear model, $Y=\beta_0 + \beta_1 + e$
+and summarize it in Table \@ref(tab:pb-fit1).
+
+```{r, pb-fit1}
+pb_fit1 <- lm(CurrentWeek ~ LastWeek, data = playbill)
+kable(summary(pb_fit1)$coef,
+      booktabs = TRUE,
+      caption = "Coefficients our linear model.")
+```
+
+### a {-}
+The confidence intervals for $\beta_1$ are given by
+
+```{r}
+confint(pb_fit1)[2, ]
+```
+
+As per the question, 1 seems like a plausible value given that returns are
+likely to be similar from one week to another (although exactly 1
+is incredibly unlikely).
+
+### b {-}
+We proceed to test the hypotheses
+$$
+\begin{gather}
+H_0:\beta_0 = 10000 \\
+H_1:\beta_0 \neq 10000
+\end{gather}
+$$
+
+by running
+
+```{r}
+h_0 <- 10000
+h_obs <- coef(pb_fit1)[[1]]
+h_obs_se <- summary(pb_fit1)$coef[1, 2]
+tobs <- (h_obs - h_0) / h_obs_se
+(pobs <- 2 * pt(abs(tobs), nrow(playbill) - 2, lower.tail = FALSE))
+```
+
+which leads us to accept the null hypothesis, $t(16) = `r tobs`$, $p = `r pobs`$.
+
+### c {-}
+We make a prediction, including prediction interval, for a 400,000\$ box
+office result in the previous week:
+
+```{r}
+predict(pb_fit1, data.frame(LastWeek = 400000), interval = "prediction")
+```
+
+A prediction of 450,000\$ is **not** feasible, given it is far outside
+our 95% prediction interval. 
+
+### d {-}
+This seems like an okay rule given the almost-perfect correlation from one
+week to another; however, looking at the residuals we see that there are at
+least three values that are predicted badly (Figure \@ref(fig:pb-resid))
+
+```{r pb-resid, fig.asp = 1, fig.cap = "Residuals for our linear fit to the playbill data."}
+par(mfrow = c(2, 2))
+plot(pb_fit1)
+```
+
+## Indicators
+
+```{r, message = FALSE}
+indicators <- read.table(file='C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/indicators.txt',header = TRUE)
+```
+
+We begin by fitting our linear model to the data (Table \@ref(tab:indicators-summary)).
+
+```{r, indicators-summary}
+ind_fit1 <- lm(PriceChange ~ LoanPaymentsOverdue, data = indicators)
+kable(summary(ind_fit1)$coef,
+      booktabs = TRUE,
+      caption = "Coefficients for our linear model to the indicators data set.")
+```
+
+### a {-}
+The 95% confidence interval for the $\beta_1$ estimate is, as before:
+
+```{r}
+confint(ind_fit1)[2, ]
+```
+
+There is reason to believe that there is a negative trend.
+
+### b {-}
+We now create a confidence interval for $\text{E}[Y|X=4]$:
+
+```{r}
+predict(ind_fit1, data.frame(LoanPaymentsOverdue = 4), interval = "confidence")
+```
+
+0% is not a reasonable estimate for $\text{E}[Y|X=4]$ since the 95% confidence
+limit is far below 0.
+
+## Invoices
+
+### a {-}
+We first find a 95% confidence level for $\beta_0$ using the output printed in
+the book.
+
+```{r}
+beta0 <- 0.6417099
+beta0_se <- 0.122707
+beta0_t <- 5.248
+beta0_margin <- 1.96 * beta0_se
+(beta0_95 <- c(beta0 - beta0_margin, beta0 + beta0_margin))
+```
+
+Thus, the confidence limit it `r beta0_95`
+
+### b {-}
+
+We have the two-sided hypotheses
+$$\begin{gathered}
+H_0: \beta_1 = 0.01\\
+H_1: \beta_1 \neq 0.01.
+\end{gathered}$$
+
+```{r}
+beta <- 0.01
+beta_obs_se <- 0.0008184
+beta_obs <- 0.0112916
+tval <- (beta - beta_obs) / beta_obs_se
+(pobs <- 2 * pt(abs(tval), 30 - 1, lower.tail = FALSE))
+```
+
+We fail to reject the null hypothesis, $t(29) = `r tval`$, $p=`r pobs`$. We
+cannot say that the true average processing time is significantly 
+different from 0.01 hours.
+
+### c {-}
+
+From the exercise description we have the expected value
+\[
+\text{Time} = 0.6417099+\text{Invoices}\times 0.0112916
+\]
+for the series. Next, we'll predict the processing time for 130 invoices using
+the output given in the exercise.
+
+```{r}
+beta0 <- 0.6417099
+beta1 <- 0.0112916
+rse <- 0.3298
+n <- 30
+df <- n - 2
+rss <- rse^2 * df
+mse <- rss / n 
+time <- beta0 + beta1 * 130
+err <- qt(0.975, 28) * sqrt(mse) * sqrt(1 + 1 / n) # since x0 = xbar
+upr <- time + err
+lwr <- time - err
+```
+
+Which results in a point estimate of `r time`, 95% CI: $[`r lwr`, `r upr`]$.
+
+
+
+

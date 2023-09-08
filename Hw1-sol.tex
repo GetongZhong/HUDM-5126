@@ -1,0 +1,462 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\hypertarget{simple-linear-regression}{%
+\section{Simple linear regression}\label{simple-linear-regression}}
+
+\hypertarget{playbill}{%
+\subsection{playbill}\label{playbill}}
+
+First we load the data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{playbill }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{\textquotesingle{}C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/playbill.csv\textquotesingle{}}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(knitr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: 程辑包'knitr'是用R版本4.1.3 来建造的
+\end{verbatim}
+
+Then we fit a linear model, \(Y=\beta_0 + \beta_1 + e\) and summarize it
+in Table @ref(tab:pb-fit1).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pb\_fit1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(CurrentWeek }\SpecialCharTok{\textasciitilde{}}\NormalTok{ LastWeek, }\AttributeTok{data =}\NormalTok{ playbill)}
+\FunctionTok{kable}\NormalTok{(}\FunctionTok{summary}\NormalTok{(pb\_fit1)}\SpecialCharTok{$}\NormalTok{coef,}
+      \AttributeTok{booktabs =} \ConstantTok{TRUE}\NormalTok{,}
+      \AttributeTok{caption =} \StringTok{"Coefficients our linear model."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1765}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1912}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1912}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1618}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2794}}@{}}
+\caption{Coefficients our linear model.}\tabularnewline
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std. Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+t value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Pr(\textgreater\textbar t\textbar)
+\end{minipage} \\
+\midrule()
+\endfirsthead
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std. Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+t value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Pr(\textgreater\textbar t\textbar)
+\end{minipage} \\
+\midrule()
+\endhead
+(Intercept) & 6804.8860355 & 9929.3177930 & 0.6853327 & 0.5029432 \\
+LastWeek & 0.9820815 & 0.0144272 & 68.0714024 & 0.0000000 \\
+\bottomrule()
+\end{longtable}
+
+\hypertarget{a}{%
+\subsubsection*{a}\label{a}}
+\addcontentsline{toc}{subsubsection}{a}
+
+The confidence intervals for \(\beta_1\) are given by
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{confint}\NormalTok{(pb\_fit1)[}\DecValTok{2}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     2.5 %    97.5 % 
+## 0.9514971 1.0126658
+\end{verbatim}
+
+As per the question, 1 seems like a plausible value given that returns
+are likely to be similar from one week to another (although exactly 1 is
+incredibly unlikely).
+
+\hypertarget{b}{%
+\subsubsection*{b}\label{b}}
+\addcontentsline{toc}{subsubsection}{b}
+
+We proceed to test the hypotheses \[
+\begin{gather}
+H_0:\beta_0 = 10000 \\
+H_1:\beta_0 \neq 10000
+\end{gather}
+\]
+
+by running
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{h\_0 }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{h\_obs }\OtherTok{\textless{}{-}} \FunctionTok{coef}\NormalTok{(pb\_fit1)[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{h\_obs\_se }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(pb\_fit1)}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{]}
+\NormalTok{tobs }\OtherTok{\textless{}{-}}\NormalTok{ (h\_obs }\SpecialCharTok{{-}}\NormalTok{ h\_0) }\SpecialCharTok{/}\NormalTok{ h\_obs\_se}
+\NormalTok{(pobs }\OtherTok{\textless{}{-}} \DecValTok{2} \SpecialCharTok{*} \FunctionTok{pt}\NormalTok{(}\FunctionTok{abs}\NormalTok{(tobs), }\FunctionTok{nrow}\NormalTok{(playbill) }\SpecialCharTok{{-}} \DecValTok{2}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7517807
+\end{verbatim}
+
+which leads us to accept the null hypothesis, \(t(16) = -0.3217858\),
+\(p = 0.7517807\).
+
+\hypertarget{c}{%
+\subsubsection*{c}\label{c}}
+\addcontentsline{toc}{subsubsection}{c}
+
+We make a prediction, including prediction interval, for a 400,000\$ box
+office result in the previous week:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{predict}\NormalTok{(pb\_fit1, }\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{LastWeek =} \DecValTok{400000}\NormalTok{), }\AttributeTok{interval =} \StringTok{"prediction"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        fit      lwr      upr
+## 1 399637.5 359832.8 439442.2
+\end{verbatim}
+
+A prediction of 450,000\$ is \textbf{not} feasible, given it is far
+outside our 95\% prediction interval.
+
+\hypertarget{d}{%
+\subsubsection*{d}\label{d}}
+\addcontentsline{toc}{subsubsection}{d}
+
+This seems like an okay rule given the almost-perfect correlation from
+one week to another; however, looking at the residuals we see that there
+are at least three values that are predicted badly (Figure
+@ref(fig:pb-resid))
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\FunctionTok{plot}\NormalTok{(pb\_fit1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{hw1-sol_files/figure-latex/pb-resid-1.pdf}
+\caption{Residuals for our linear fit to the playbill data.}
+\end{figure}
+
+\hypertarget{indicators}{%
+\subsection{Indicators}\label{indicators}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{indicators }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}\AttributeTok{file=}\StringTok{\textquotesingle{}C:/Users/tonyg/Desktop/Academic/Grad/HUDM 5126/indicators.txt\textquotesingle{}}\NormalTok{,}\AttributeTok{header =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We begin by fitting our linear model to the data (Table
+@ref(tab:indicators-summary)).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ind\_fit1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(PriceChange }\SpecialCharTok{\textasciitilde{}}\NormalTok{ LoanPaymentsOverdue, }\AttributeTok{data =}\NormalTok{ indicators)}
+\FunctionTok{kable}\NormalTok{(}\FunctionTok{summary}\NormalTok{(ind\_fit1)}\SpecialCharTok{$}\NormalTok{coef,}
+      \AttributeTok{booktabs =} \ConstantTok{TRUE}\NormalTok{,}
+      \AttributeTok{caption =} \StringTok{"Coefficients for our linear model to the indicators data set."}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2857}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1571}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1429}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2714}}@{}}
+\caption{Coefficients for our linear model to the indicators data
+set.}\tabularnewline
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std. Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+t value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Pr(\textgreater\textbar t\textbar)
+\end{minipage} \\
+\midrule()
+\endfirsthead
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std. Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+t value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Pr(\textgreater\textbar t\textbar)
+\end{minipage} \\
+\midrule()
+\endhead
+(Intercept) & 4.514494 & 3.3240193 & 1.358143 & 0.1932624 \\
+LoanPaymentsOverdue & -2.248520 & 0.9033113 & -2.489197 & 0.0241941 \\
+\bottomrule()
+\end{longtable}
+
+\hypertarget{a-1}{%
+\subsubsection*{a}\label{a-1}}
+\addcontentsline{toc}{subsubsection}{a}
+
+The 95\% confidence interval for the \(\beta_1\) estimate is, as before:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{confint}\NormalTok{(ind\_fit1)[}\DecValTok{2}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      2.5 %     97.5 % 
+## -4.1634543 -0.3335853
+\end{verbatim}
+
+There is reason to believe that there is a negative trend.
+
+\hypertarget{b-1}{%
+\subsubsection*{b}\label{b-1}}
+\addcontentsline{toc}{subsubsection}{b}
+
+We now create a confidence interval for \(\text{E}[Y|X=4]\):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{predict}\NormalTok{(ind\_fit1, }\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{LoanPaymentsOverdue =} \DecValTok{4}\NormalTok{), }\AttributeTok{interval =} \StringTok{"confidence"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         fit       lwr       upr
+## 1 -4.479585 -6.648849 -2.310322
+\end{verbatim}
+
+0\% is not a reasonable estimate for \(\text{E}[Y|X=4]\) since the 95\%
+confidence limit is far below 0.
+
+\hypertarget{invoices}{%
+\subsection{Invoices}\label{invoices}}
+
+\hypertarget{a-2}{%
+\subsubsection*{a}\label{a-2}}
+\addcontentsline{toc}{subsubsection}{a}
+
+We first find a 95\% confidence level for \(\beta_0\) using the output
+printed in the book.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta0 }\OtherTok{\textless{}{-}} \FloatTok{0.6417099}
+\NormalTok{beta0\_se }\OtherTok{\textless{}{-}} \FloatTok{0.122707}
+\NormalTok{beta0\_t }\OtherTok{\textless{}{-}} \FloatTok{5.248}
+\NormalTok{beta0\_margin }\OtherTok{\textless{}{-}} \FloatTok{1.96} \SpecialCharTok{*}\NormalTok{ beta0\_se}
+\NormalTok{(beta0\_95 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(beta0 }\SpecialCharTok{{-}}\NormalTok{ beta0\_margin, beta0 }\SpecialCharTok{+}\NormalTok{ beta0\_margin))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4012042 0.8822156
+\end{verbatim}
+
+Thus, the confidence limit it 0.4012042, 0.8822156
+
+\hypertarget{b-2}{%
+\subsubsection*{b}\label{b-2}}
+\addcontentsline{toc}{subsubsection}{b}
+
+We have the two-sided hypotheses \[\begin{gathered}
+H_0: \beta_1 = 0.01\\
+H_1: \beta_1 \neq 0.01.
+\end{gathered}\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta }\OtherTok{\textless{}{-}} \FloatTok{0.01}
+\NormalTok{beta\_obs\_se }\OtherTok{\textless{}{-}} \FloatTok{0.0008184}
+\NormalTok{beta\_obs }\OtherTok{\textless{}{-}} \FloatTok{0.0112916}
+\NormalTok{tval }\OtherTok{\textless{}{-}}\NormalTok{ (beta }\SpecialCharTok{{-}}\NormalTok{ beta\_obs) }\SpecialCharTok{/}\NormalTok{ beta\_obs\_se}
+\NormalTok{(pobs }\OtherTok{\textless{}{-}} \DecValTok{2} \SpecialCharTok{*} \FunctionTok{pt}\NormalTok{(}\FunctionTok{abs}\NormalTok{(tval), }\DecValTok{30} \SpecialCharTok{{-}} \DecValTok{1}\NormalTok{, }\AttributeTok{lower.tail =} \ConstantTok{FALSE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1253666
+\end{verbatim}
+
+We fail to reject the null hypothesis, \(t(29) = -1.5782014\),
+\(p=0.1253666\). We cannot say that the true average processing time is
+significantly different from 0.01 hours.
+
+\hypertarget{c-1}{%
+\subsubsection*{c}\label{c-1}}
+\addcontentsline{toc}{subsubsection}{c}
+
+From the exercise description we have the expected value \[
+\text{Time} = 0.6417099+\text{Invoices}\times 0.0112916
+\] for the series. Next, we'll predict the processing time for 130
+invoices using the output given in the exercise.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beta0 }\OtherTok{\textless{}{-}} \FloatTok{0.6417099}
+\NormalTok{beta1 }\OtherTok{\textless{}{-}} \FloatTok{0.0112916}
+\NormalTok{rse }\OtherTok{\textless{}{-}} \FloatTok{0.3298}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{30}
+\NormalTok{df }\OtherTok{\textless{}{-}}\NormalTok{ n }\SpecialCharTok{{-}} \DecValTok{2}
+\NormalTok{rss }\OtherTok{\textless{}{-}}\NormalTok{ rse}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{*}\NormalTok{ df}
+\NormalTok{mse }\OtherTok{\textless{}{-}}\NormalTok{ rss }\SpecialCharTok{/}\NormalTok{ n }
+\NormalTok{time }\OtherTok{\textless{}{-}}\NormalTok{ beta0 }\SpecialCharTok{+}\NormalTok{ beta1 }\SpecialCharTok{*} \DecValTok{130}
+\NormalTok{err }\OtherTok{\textless{}{-}} \FunctionTok{qt}\NormalTok{(}\FloatTok{0.975}\NormalTok{, }\DecValTok{28}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{sqrt}\NormalTok{(mse) }\SpecialCharTok{*} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{1} \SpecialCharTok{+} \DecValTok{1} \SpecialCharTok{/}\NormalTok{ n) }\CommentTok{\# since x0 = xbar}
+\NormalTok{upr }\OtherTok{\textless{}{-}}\NormalTok{ time }\SpecialCharTok{+}\NormalTok{ err}
+\NormalTok{lwr }\OtherTok{\textless{}{-}}\NormalTok{ time }\SpecialCharTok{{-}}\NormalTok{ err}
+\end{Highlighting}
+\end{Shaded}
+
+Which results in a point estimate of 2.1096179, 95\% CI:
+\([1.446172, 2.7730638]\).
+
+\end{document}
